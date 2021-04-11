@@ -1,6 +1,5 @@
 package vn.nuce.ducnh.controllers;
 
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.context.MessageSource;
@@ -22,7 +21,6 @@ import vn.nuce.ducnh.exception.ExceptionMessage;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
@@ -90,7 +88,8 @@ public class DucnhControllerAdvice {
 
             if (ex.getStackTrace() != null && ex.getStackTrace().length > 0) {
                 StackTraceElement e = ex.getStackTrace()[0];
-                builder.append(" @").append(e.getClassName()).append(".").append(e.getMethodName()).append(":").append(e.getLineNumber());
+                builder.append(" @").append(e.getClassName()).append(".").append(e.getMethodName()).append(":")
+                        .append(e.getLineNumber());
             }
 
 

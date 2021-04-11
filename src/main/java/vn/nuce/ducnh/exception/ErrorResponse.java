@@ -130,13 +130,14 @@ public class ErrorResponse {
         } else if (!(o instanceof ErrorResponse)) {
             return false;
         } else {
-            ErrorResponse other = (ErrorResponse)o;
+            ErrorResponse other = (ErrorResponse) o;
             if (!other.canEqual(this)) {
                 return false;
             } else if (this.getStatus() != other.getStatus()) {
                 return false;
             } else {
-                label97: {
+                label97:
+                {
                     Object this$timestamp = this.getTimestamp();
                     Object other$timestamp = other.getTimestamp();
                     if (this$timestamp == null) {
@@ -170,7 +171,8 @@ public class ErrorResponse {
                     return false;
                 }
 
-                label76: {
+                label76:
+                {
                     Object this$message = this.getMessage();
                     Object other$message = other.getMessage();
                     if (this$message == null) {
@@ -226,6 +228,8 @@ public class ErrorResponse {
 
     public String toString() {
         LocalDateTime var10000 = this.getTimestamp();
-        return "ErrorResponse(timestamp=" + var10000 + ", status=" + this.getStatus() + ", error=" + this.getError() + ", exception=" + this.getException() + ", message=" + this.getMessage() + ", data=" + this.getData() + ", errors=" + this.getErrors() + ", path=" + this.getPath() + ")";
+        return "ErrorResponse(timestamp=" + var10000 + ", status=" + this.getStatus() + ", error=" + this
+                .getError() + ", exception=" + this.getException() + ", message=" + this.getMessage() + ", data=" + this
+                .getData() + ", errors=" + this.getErrors() + ", path=" + this.getPath() + ")";
     }
 }

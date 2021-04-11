@@ -60,7 +60,8 @@ public class DucnhException extends Exception implements Serializable {
         this.status = status;
     }
 
-    public DucnhException(String message, LocalDateTime timestamp, String responseStatusCode, String message2, HttpStatus status) {
+    public DucnhException(String message, LocalDateTime timestamp, String responseStatusCode, String message2,
+                          HttpStatus status) {
         super(message);
         this.status = HttpStatus.BAD_REQUEST;
         this.timestamp = timestamp;
@@ -114,6 +115,8 @@ public class DucnhException extends Exception implements Serializable {
 
     public String toString() {
         LocalDateTime var10000 = this.getTimestamp();
-        return "DucnhException(timestamp=" + var10000 + ", responseStatusCode=" + this.getResponseStatusCode() + ", status=" + this.getStatus() + ", data=" + this.getData() + ", errors=" + this.getErrors() + ")";
+        return "DucnhException(timestamp=" + var10000 + ", responseStatusCode=" + this
+                .getResponseStatusCode() + ", status=" + this.getStatus() + ", data=" + this
+                .getData() + ", errors=" + this.getErrors() + ")";
     }
 }

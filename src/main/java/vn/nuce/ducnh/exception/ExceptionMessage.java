@@ -2,7 +2,6 @@ package vn.nuce.ducnh.exception;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.time.LocalDateTime;
 
@@ -77,11 +76,12 @@ public class ExceptionMessage {
         } else if (!(o instanceof ExceptionMessage)) {
             return false;
         } else {
-            ExceptionMessage other = (ExceptionMessage)o;
+            ExceptionMessage other = (ExceptionMessage) o;
             if (!other.canEqual(this)) {
                 return false;
             } else {
-                label71: {
+                label71:
+                {
                     Object this$status = this.getStatus();
                     Object other$status = other.getStatus();
                     if (this$status == null) {
@@ -105,7 +105,8 @@ public class ExceptionMessage {
                     return false;
                 }
 
-                label57: {
+                label57:
+                {
                     Object this$errorKey = this.getErrorKey();
                     Object other$errorKey = other.getErrorKey();
                     if (this$errorKey == null) {
@@ -151,13 +152,15 @@ public class ExceptionMessage {
 
     public String toString() {
         LocalDateTime var10000 = this.getTimestamp();
-        return "ExceptionMessage(timestamp=" + var10000 + ", errorKey=" + this.getErrorKey() + ", status=" + this.getStatus() + ", message=" + this.getMessage() + ", params=" + this.getParams() + ")";
+        return "ExceptionMessage(timestamp=" + var10000 + ", errorKey=" + this.getErrorKey() + ", status=" + this
+                .getStatus() + ", message=" + this.getMessage() + ", params=" + this.getParams() + ")";
     }
 
     public ExceptionMessage() {
     }
 
-    public ExceptionMessage(final LocalDateTime timestamp, final String errorKey, final Integer status, final String message, final String params) {
+    public ExceptionMessage(final LocalDateTime timestamp, final String errorKey, final Integer status,
+                            final String message, final String params) {
         this.timestamp = timestamp;
         this.errorKey = errorKey;
         this.status = status;

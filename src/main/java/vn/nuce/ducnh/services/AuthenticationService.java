@@ -20,7 +20,6 @@ import vn.nuce.ducnh.entity.repository.RoleRepository;
 import vn.nuce.ducnh.entity.repository.UserRepository;
 import vn.nuce.ducnh.security.jwt.JwtUtils;
 
-import javax.annotation.PostConstruct;
 import javax.mail.MessagingException;
 import java.util.HashSet;
 import java.util.List;
@@ -70,7 +69,8 @@ public class AuthenticationService {
                     userDetails.getEmail(),
                     roles));
         } catch (Exception e) {
-            throw new DucnhException("USERNAME_OR_PASSWORD_INCORRECT", "Error: Username or password incorrect!",HttpStatus.BAD_REQUEST);
+            throw new DucnhException("USERNAME_OR_PASSWORD_INCORRECT", "Error: Username or password incorrect!",
+                    HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -84,7 +84,8 @@ public class AuthenticationService {
         }
 
         if (!Pattern.matches("^(BUYER|SELLER)$", signUpRequest.getUserType().toString())) {
-            throw new DucnhException("USER_TYPE_ERROR", "Error: User type must be SELLER or BUYER!", HttpStatus.BAD_REQUEST);
+            throw new DucnhException("USER_TYPE_ERROR", "Error: User type must be SELLER or BUYER!",
+                    HttpStatus.BAD_REQUEST);
         }
 
         String genPassword = generateRandomPassword.generateRandom();
