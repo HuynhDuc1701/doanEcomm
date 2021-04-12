@@ -1,6 +1,7 @@
 package vn.nuce.ducnh.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -26,7 +27,6 @@ public class User extends BaseEntity {
     private Long id;
 
     @NotBlank
-    @Size(max = 20)
     private String username;
 
     @NotBlank

@@ -35,7 +35,7 @@ public class JwtUtils {
 
     public String generateJwtTokenGoogleAccount(OAuth2User principal) {
         return Jwts.builder()
-                .setSubject(principal.getAttribute("name"))
+                .setSubject(principal.getAttribute("email"))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
