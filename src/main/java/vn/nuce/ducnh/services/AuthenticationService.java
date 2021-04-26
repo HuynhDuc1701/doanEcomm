@@ -16,14 +16,11 @@ import vn.nuce.ducnh.controllers.DTO.request.SignupRequest;
 import vn.nuce.ducnh.controllers.DTO.response.JwtResponse;
 import vn.nuce.ducnh.controllers.DTO.response.MessageResponse;
 import vn.nuce.ducnh.entity.*;
-import vn.nuce.ducnh.entity.repository.RoleRepository;
 import vn.nuce.ducnh.entity.repository.UserRepository;
 import vn.nuce.ducnh.security.jwt.JwtUtils;
 
 import javax.mail.MessagingException;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -35,8 +32,6 @@ public class AuthenticationService {
     @Autowired
     UserRepository userRepository;
 
-    @Autowired
-    RoleRepository roleRepository;
 
     @Autowired
     PasswordEncoder encoder;
@@ -51,55 +46,39 @@ public class AuthenticationService {
     EmailService emailService;
 
     public ResponseEntity<?> login(LoginRequest loginRequest) throws DucnhException {
-        try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String jwt = jwtUtils.generateJwtToken(authentication);
 
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-            List<String> roles = userDetails.getAuthorities().stream()
-                    .map(item -> item.getAuthority())
-                    .collect(Collectors.toList());
+            if(!userDetails.isUserActive())
+                throw new DucnhException("ACCOUNT_INACTIVE", "Tài khoản đã bị vô hiệu.", HttpStatus.BAD_REQUEST);
 
 
             return ResponseEntity.ok(new JwtResponse(jwt,
                     userDetails.getId(),
                     userDetails.getUsername(),
-                    userDetails.getEmail(),
-                    roles));
-        } catch (Exception e) {
-            throw new DucnhException("USERNAME_OR_PASSWORD_INCORRECT", "Error: Username or password incorrect!",
-                    HttpStatus.BAD_REQUEST);
-        }
+                    userDetails.getEmail()));
     }
 
     public ResponseEntity<?> registerUser(SignupRequest signUpRequest) throws DucnhException {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-            throw new DucnhException("USERNAME_EXIST", "Error: Username is already taken!", HttpStatus.BAD_REQUEST);
+            throw new DucnhException("USERNAME_EXIST", "Tên đăng nhập đã tồn tại.", HttpStatus.BAD_REQUEST);
         }
 
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            throw new DucnhException("EMAIL_EXIST", "Error: Email is already in use!", HttpStatus.BAD_REQUEST);
+            throw new DucnhException("EMAIL_EXIST", "Email đã tồn tại.", HttpStatus.BAD_REQUEST);
         }
 
-        if (!Pattern.matches("^(BUYER|SELLER)$", signUpRequest.getUserType().toString())) {
-            throw new DucnhException("USER_TYPE_ERROR", "Error: User type must be SELLER or BUYER!",
-                    HttpStatus.BAD_REQUEST);
-        }
 
         String genPassword = generateRandomPassword.generateRandom();
-        // Create new user's account
         User user = new User(signUpRequest.getUsername(),
                 signUpRequest.getEmail(),
                 encoder.encode(genPassword),
-                EUserType.valueOf(signUpRequest.getUserType()));
+                Status.ACTIVE
+                );
 
-        Set<Role> roles = new HashSet<>();
-        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-        roles.add(userRole);
-        user.setRoles(roles);
         userRepository.save(user);
         try {
             emailService.sendOtpMessage(user.getEmail(), "Your password",
